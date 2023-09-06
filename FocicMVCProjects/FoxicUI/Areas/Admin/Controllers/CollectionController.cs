@@ -62,4 +62,23 @@ namespace FoxicUI.Areas.Admin.Controllers;
 		await _context.SaveChangesAsync();
 		return RedirectToAction(nameof(Index));
 	}
+
+	public async Task<IActionResult> Delete(int id)
+	{
+		Collection? collection = await _context.Collections.FindAsync(id);
+		if (collection == null) return NotFound();
+		return View(collection);
+	}
+	[HttpPost]
+	[ActionName("Delete")]
+	[ValidateAntiForgeryToken]
+	public async Task<IActionResult> DeletePost(int id)
+	{
+		Collection? collection = await _context.Collections.FindAsync(id);
+		if (collection == null) return NotFound();
+		_context.Collections.Remove(collection);
+		await _context.SaveChangesAsync();
+		return RedirectToAction(nameof(Index));
+
+	}
 }

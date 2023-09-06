@@ -57,4 +57,23 @@ public class BrandController : Controller
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        Brand? brand = await _context.Brands.FindAsync(id);
+        if (brand == null) return NotFound();
+        return View(brand);
+    }
+    [HttpPost]
+    [ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeletePost(int id)
+    {
+        Brand? brand = await _context.Brands.FindAsync(id);
+        if (brand == null) return NotFound();
+        _context.Brands.Remove(brand);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+
+    }
 }

@@ -66,4 +66,23 @@ public class ColorController : Controller
 		return RedirectToAction(nameof(Index));
 	}
 
+	public async Task<IActionResult> Delete(int id)
+	{
+		Color? color = await _context.Colors.FindAsync(id);
+		if (color == null) return NotFound();
+		return View(color);
+	}
+	[HttpPost]
+	[ActionName("Delete")]
+	[ValidateAntiForgeryToken]
+	public async Task<IActionResult> DeletePost(int id)
+	{
+		Color? color = await _context.Colors.FindAsync(id);
+		if (color == null) return NotFound();
+		_context.Colors.Remove(color);
+		await _context.SaveChangesAsync();
+		return RedirectToAction(nameof(Index));
+
+	}
+
 }
